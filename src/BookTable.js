@@ -2,6 +2,13 @@ import React from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 
+const sortUndefinedAfterText = (a, b) => {
+  if (a && b) return a < b ? 1 : -1
+  if (!a && !b) return 0
+  if (a && !b) return 1
+  if (!a && b) return -1
+}
+
 const columns = [
   {
     Header: 'Title',
@@ -16,19 +23,20 @@ const columns = [
     Header: 'Priority',
     accessor: 'priority',
     width: 100,
-    style: { 'text-align': 'center' }
+    style: { textAlign: 'center' },
+    sortMethod: sortUndefinedAfterText
   },
   {
     Header: 'Number of Reviews',
     accessor: 'nbReviews',
     width: 200,
-    style: { 'text-align': 'center' }
+    style: { textAlign: 'center' }
   },
   {
     Header: 'Stars',
     accessor: 'stars',
     width: 100,
-    style: { 'text-align': 'center' }
+    style: { textAlign: 'center' }
   },
   {
     Header: 'Tags',
@@ -38,5 +46,10 @@ const columns = [
 ]
 
 export default ({ books }) => (
-  <ReactTable data={books} columns={columns} className="-striped -highlight" />
+  <ReactTable
+    data={books}
+    columns={columns}
+    className="-striped -highlight"
+    defaultSorted={[{ id: 'priority', desc: true }]}
+  />
 )
