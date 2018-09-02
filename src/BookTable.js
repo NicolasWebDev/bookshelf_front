@@ -1,30 +1,42 @@
 import React from 'react'
-import _ from 'lodash'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
 
-const columns = ['title', 'author', 'priority', 'nbReviews', 'stars', 'tags']
+const columns = [
+  {
+    Header: 'Title',
+    accessor: 'title'
+  },
+  {
+    Header: 'Author',
+    accessor: 'author',
+    width: 200
+  },
+  {
+    Header: 'Priority',
+    accessor: 'priority',
+    width: 100,
+    style: { 'text-align': 'center' }
+  },
+  {
+    Header: 'Number of Reviews',
+    accessor: 'nbReviews',
+    width: 200,
+    style: { 'text-align': 'center' }
+  },
+  {
+    Header: 'Stars',
+    accessor: 'stars',
+    width: 100,
+    style: { 'text-align': 'center' }
+  },
+  {
+    Header: 'Tags',
+    accessor: 'tags',
+    width: 200
+  }
+]
 
-const BookTable = ({ books }) => (
-  <div>
-    <h1>My Book Table</h1>
-    <table>
-      <thead>
-        <tr>
-          {columns.map(column => (
-            <th>{_.startCase(column)}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {books.map(book => (
-          <tr key={book.title}>
-            {columns.map(column => (
-              <td>{book[column]}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+export default ({ books }) => (
+  <ReactTable data={books} columns={columns} className="-striped -highlight" />
 )
-
-export default BookTable
