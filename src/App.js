@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import './App.css'
 import BookTable from './BookTable'
+import BookForm from './BookForm'
 
 const BOOKS_ENDPOINT = 'http://localhost:3001'
 
@@ -14,7 +15,7 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
+  fetchBooks = () => {
     fetch(BOOKS_ENDPOINT)
       .then(res => res.json())
       .then(
@@ -33,6 +34,10 @@ class App extends Component {
       )
   }
 
+  componentDidMount() {
+    this.fetchBooks()
+  }
+
   render() {
     const { error, isLoaded, books } = this.state
     if (error) {
@@ -40,7 +45,14 @@ class App extends Component {
     } else if (!isLoaded) {
       return <div>Loading...</div>
     } else {
-      return <BookTable books={books} />
+      return (
+        <Fragment>
+          <h2>Add a book from Amazon</h2>
+          <BookForm callback={this.fetchBooks} />
+          <h2>Books</h2>
+          <BookTable books={books} />
+        </Fragment>
+      )
     }
   }
 }

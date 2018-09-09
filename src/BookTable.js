@@ -11,6 +11,11 @@ const sortUndefinedAfterText = (a, b) => {
 
 const columns = [
   {
+    Header: 'ID',
+    accessor: '_id',
+    width: 50
+  },
+  {
     Header: 'Title',
     accessor: 'title'
   },
@@ -22,7 +27,7 @@ const columns = [
   {
     Header: 'Priority',
     accessor: 'priority',
-    width: 100,
+    width: 80,
     style: { textAlign: 'center' },
     sortMethod: sortUndefinedAfterText
   },
