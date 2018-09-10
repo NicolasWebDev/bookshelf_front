@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Notification from './Notification'
 import ButtonAdd from './ButtonAdd'
 import TextField from '@material-ui/core/TextField'
+import axios from 'axios'
 import { withStyles } from '@material-ui/core/styles'
 
 const ADD_BOOK_ENDPOINT = 'http://localhost:3001/book'
@@ -25,12 +26,32 @@ class BookForm extends Component {
     }
   }
 
-  addBookFromAmazonURL = amazonURL =>
-    fetch(ADD_BOOK_ENDPOINT, {
-      method: 'POST',
-      body: JSON.stringify({ amazonURL }),
-      headers: { 'Content-Type': 'application/json' }
+  addBookErrorHandler = error => {
+    const message = error.response
+      ? error.response.data.error
+      : error.request
+        ? 'The server does not respond'
+        : 'Other kind of error'
+    this.setState({
+      loading: false,
+      notification: `Error: ${message}`
     })
+  }
+
+  addBookSuccessHandler = res => {
+    this.props.callback()
+    this.setState({
+      loading: false,
+      amazonURL: '',
+      notification: 'Book successfully added!'
+    })
+  }
+
+  addBookFromAmazonURL = amazonURL =>
+    axios
+      .post(ADD_BOOK_ENDPOINT, { amazonURL })
+      .then(this.addBookSuccessHandler)
+      .catch(this.addBookErrorHandler)
 
   handleChange = e => {
     this.setState({ amazonURL: e.target.value })
@@ -39,14 +60,7 @@ class BookForm extends Component {
   handleSubmit = e => {
     e.preventDefault()
     this.setState({ loading: true })
-    this.addBookFromAmazonURL(this.state.amazonURL).then(() => {
-      this.props.callback()
-      this.setState({
-        loading: false,
-        amazonURL: '',
-        notification: 'Book successfully added!'
-      })
-    })
+    this.addBookFromAmazonURL(this.state.amazonURL)
   }
 
   clearNotification = () => {
