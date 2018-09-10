@@ -56,5 +56,7 @@ export default ({ books }) => (
     columns={columns}
     className="-striped -highlight"
     defaultSorted={[{ id: 'priority', desc: true }]}
+    defaultPageSize={books.length}
+    showPagination={false}
   />
 )
