@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react'
 import './App.css'
 import BookTable from './BookTable'
 import BookForm from './BookForm'
+import axios from 'axios'
+import { formatServerError } from './util.js'
 
 const BOOKS_ENDPOINT = 'http://localhost:3001'
 
@@ -9,29 +11,27 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      error: null,
+      errorMessage: '',
       isLoaded: false,
       books: []
     }
   }
 
   fetchBooks = () => {
-    fetch(BOOKS_ENDPOINT)
-      .then(res => res.json())
-      .then(
-        result => {
-          this.setState({
-            isLoaded: true,
-            books: result.books
-          })
-        },
-        error => {
-          this.setState({
-            isLoaded: true,
-            error
-          })
-        }
-      )
+    axios
+      .get(BOOKS_ENDPOINT)
+      .then(({ data }) => {
+        this.setState({
+          isLoaded: true,
+          books: data.books
+        })
+      })
+      .catch(error => {
+        this.setState({
+          isLoaded: true,
+          errorMessage: formatServerError(error)
+        })
+      })
   }
 
   componentDidMount() {
@@ -39,9 +39,9 @@ class App extends Component {
   }
 
   render() {
-    const { error, isLoaded, books } = this.state
-    if (error) {
-      return <div>Error: {error.message}</div>
+    const { errorMessage, isLoaded, books } = this.state
+    if (errorMessage) {
+      return <div>{errorMessage}</div>
     } else if (!isLoaded) {
       return <div>Loading...</div>
     } else {

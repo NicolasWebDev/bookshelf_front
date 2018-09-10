@@ -4,6 +4,7 @@ import ButtonAdd from './ButtonAdd'
 import TextField from '@material-ui/core/TextField'
 import axios from 'axios'
 import { withStyles } from '@material-ui/core/styles'
+import { formatServerError } from './util.js'
 
 const ADD_BOOK_ENDPOINT = 'http://localhost:3001/book'
 
@@ -27,14 +28,9 @@ class BookForm extends Component {
   }
 
   addBookErrorHandler = error => {
-    const message = error.response
-      ? error.response.data.error
-      : error.request
-        ? 'The server does not respond'
-        : 'Other kind of error'
     this.setState({
       loading: false,
-      notification: `Error: ${message}`
+      notification: formatServerError(error)
     })
   }
 
