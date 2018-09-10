@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Notification from './Notification'
 import ButtonAdd from './ButtonAdd'
 import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles'
@@ -17,7 +18,11 @@ const styles = theme => ({
 class BookForm extends Component {
   constructor(props) {
     super(props)
-    this.state = { amazonURL: '', loading: false }
+    this.state = {
+      amazonURL: '',
+      loading: false,
+      notification: ''
+    }
   }
 
   addBookFromAmazonURL = amazonURL =>
@@ -36,8 +41,16 @@ class BookForm extends Component {
     this.setState({ loading: true })
     this.addBookFromAmazonURL(this.state.amazonURL).then(() => {
       this.props.callback()
-      this.setState({ loading: false, amazonURL: '' })
+      this.setState({
+        loading: false,
+        amazonURL: '',
+        notification: 'Book successfully added!'
+      })
     })
+  }
+
+  clearNotification = () => {
+    this.setState({ notification: '' })
   }
 
   render() {
@@ -54,6 +67,10 @@ class BookForm extends Component {
         <ButtonAdd
           loading={this.state.loading}
           handleClick={this.handleSubmit}
+        />
+        <Notification
+          closeCallback={this.clearNotification}
+          message={this.state.notification}
         />
       </form>
     )
