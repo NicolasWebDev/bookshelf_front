@@ -5,7 +5,7 @@ import BookForm from './BookForm'
 import axios from 'axios'
 import { formatServerError } from './util.js'
 
-const BOOKS_ENDPOINT = 'http://localhost:3001'
+const BOOKS_ENDPOINT = 'http://localhost:3001/books'
 
 class App extends Component {
   constructor(props) {
