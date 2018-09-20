@@ -6,7 +6,7 @@ import axios from 'axios'
 import { withStyles } from '@material-ui/core/styles'
 import { formatServerError } from './util.js'
 
-const ADD_BOOK_ENDPOINT = 'http://localhost:3001/book'
+const ADD_BOOK_ENDPOINT = '/api/book'
 
 const styles = theme => ({
   textField: {
