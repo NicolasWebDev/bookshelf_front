@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component, StrictMode } from 'react'
 import './App.css'
 import BookTable from './BookTable'
 import BookForm from './BookForm'
@@ -46,12 +46,12 @@ class App extends Component {
       return <div>Loading...</div>
     } else {
       return (
-        <Fragment>
+        <StrictMode>
           <h2>Add a book from Amazon</h2>
           <BookForm callback={this.fetchBooks} />
           <h2>Books</h2>
           <BookTable books={books} />
-        </Fragment>
+        </StrictMode>
       )
     }
   }
