@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NotificationConsumer } from './NotificationProvider'
+import withNotification from './withNotification'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
@@ -14,7 +14,7 @@ const sortUndefinedAfterText = (a, b) => {
   if (!a && b) return -1
 }
 
-export default class BookTable extends Component {
+class BookTable extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -40,10 +40,10 @@ export default class BookTable extends Component {
     axios
       .put(updateBookPath(bookId), { priority })
       .then(() => {
-        this.notify('Priority successfully changed!')
+        this.props.notify('Priority successfully changed!')
       })
       .catch(error => {
-        this.notify(formatServerError(error))
+        this.props.notify(formatServerError(error))
       })
   }
 
@@ -92,21 +92,16 @@ export default class BookTable extends Component {
     ]
 
     return (
-      <NotificationConsumer>
-        {notify => {
-          this.notify = notify
-          return (
-            <ReactTable
-              data={books}
-              columns={columns}
-              className="-striped -highlight"
-              defaultSorted={[{ id: 'priority', desc: true }]}
-              defaultPageSize={books.length}
-              showPagination={false}
-            />
-          )
-        }}
-      </NotificationConsumer>
+      <ReactTable
+        data={books}
+        columns={columns}
+        className="-striped -highlight"
+        defaultSorted={[{ id: 'priority', desc: true }]}
+        defaultPageSize={books.length}
+        showPagination={false}
+      />
     )
   }
 }
+
+export default withNotification(BookTable)

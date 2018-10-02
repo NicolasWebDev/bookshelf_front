@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { compose } from 'recompose'
+import withNotification from './withNotification'
 import ButtonAdd from './ButtonAdd'
 import TextField from '@material-ui/core/TextField'
 import axios from 'axios'
 import { withStyles } from '@material-ui/core/styles'
 import { formatServerError } from './util.js'
-import { NotificationConsumer } from './NotificationProvider'
 
 const ADD_BOOK_ENDPOINT = '/api/book'
 
@@ -30,7 +31,7 @@ class BookForm extends Component {
     this.setState({
       loading: false
     })
-    this.notify(formatServerError(error))
+    this.props.notify(formatServerError(error))
   }
 
   addBookSuccessHandler = res => {
@@ -39,7 +40,7 @@ class BookForm extends Component {
       loading: false,
       amazonURL: ''
     })
-    this.notify('Book successfully added!')
+    this.props.notify('Book successfully added!')
   }
 
   addBookFromAmazonURL = amazonURL =>
@@ -61,28 +62,24 @@ class BookForm extends Component {
   render() {
     const { classes } = this.props
     return (
-      <NotificationConsumer>
-        {notify => {
-          this.notify = notify
-          return (
-            <form onSubmit={this.handleSubmit}>
-              <TextField
-                id="amazonURL"
-                label="Amazon URL"
-                className={classes.textField}
-                value={this.state.amazonURL}
-                onChange={this.handleChange}
-              />
-              <ButtonAdd
-                loading={this.state.loading}
-                handleClick={this.handleSubmit}
-              />
-            </form>
-          )
-        }}
-      </NotificationConsumer>
+      <form onSubmit={this.handleSubmit}>
+        <TextField
+          id="amazonURL"
+          label="Amazon URL"
+          className={classes.textField}
+          value={this.state.amazonURL}
+          onChange={this.handleChange}
+        />
+        <ButtonAdd
+          loading={this.state.loading}
+          handleClick={this.handleSubmit}
+        />
+      </form>
     )
   }
 }
 
-export default withStyles(styles)(BookForm)
+export default compose(
+  withStyles(styles),
+  withNotification
+)(BookForm)

@@ -51,4 +51,8 @@ export class NotificationProvider extends Component {
   }
 }
 
-export const NotificationConsumer = NotificationContext.Consumer
+export default WrappedComponent => ({ ...props }) => (
+  <NotificationContext.Consumer>
+    {notify => <WrappedComponent {...props} notify={notify} />}
+  </NotificationContext.Consumer>
+)

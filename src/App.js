@@ -4,7 +4,7 @@ import BookTable from './BookTable'
 import BookForm from './BookForm'
 import axios from 'axios'
 import { formatServerError } from './util.js'
-import { NotificationProvider } from './NotificationProvider'
+import { NotificationProvider } from './withNotification'
 
 const readBooksPath = '/api/books'
 
