@@ -5,7 +5,7 @@ import BookForm from './BookForm'
 import axios from 'axios'
 import { formatServerError } from './util.js'
 
-const BOOKS_ENDPOINT = '/api/books'
+const readBooksPath = '/api/books'
 
 class App extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class App extends Component {
 
   fetchBooks = () => {
     axios
-      .get(BOOKS_ENDPOINT)
+      .get(readBooksPath)
       .then(({ data }) => {
         this.setState({
           isLoaded: true,
