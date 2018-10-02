@@ -4,6 +4,7 @@ import BookTable from './BookTable'
 import BookForm from './BookForm'
 import axios from 'axios'
 import { formatServerError } from './util.js'
+import { NotificationProvider } from './NotificationProvider'
 
 const readBooksPath = '/api/books'
 
@@ -47,10 +48,12 @@ class App extends Component {
     } else {
       return (
         <StrictMode>
-          <h2>Add a book from Amazon</h2>
-          <BookForm callback={this.fetchBooks} />
-          <h2>Books</h2>
-          <BookTable books={books} />
+          <NotificationProvider>
+            <h2>Add a book from Amazon</h2>
+            <BookForm callback={this.fetchBooks} />
+            <h2>Books</h2>
+            <BookTable books={books} />
+          </NotificationProvider>
         </StrictMode>
       )
     }

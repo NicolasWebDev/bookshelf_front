@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react'
-import Notification from './Notification'
+import React, { Component } from 'react'
+import { NotificationConsumer } from './NotificationProvider'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
@@ -19,8 +19,7 @@ export default class BookTable extends Component {
     super(props)
     this.state = {
       amazonURL: '',
-      loading: false,
-      notification: ''
+      loading: false
     }
   }
 
@@ -41,19 +40,11 @@ export default class BookTable extends Component {
     axios
       .put(updateBookPath(bookId), { priority })
       .then(() => {
-        this.setState({
-          notification: 'Priority successfully changed!'
-        })
+        this.notify('Priority successfully changed!')
       })
       .catch(error => {
-        this.setState({
-          notification: formatServerError(error)
-        })
+        this.notify(formatServerError(error))
       })
-  }
-
-  clearNotification = () => {
-    this.setState({ notification: '' })
   }
 
   render() {
@@ -101,20 +92,21 @@ export default class BookTable extends Component {
     ]
 
     return (
-      <Fragment>
-        <ReactTable
-          data={books}
-          columns={columns}
-          className="-striped -highlight"
-          defaultSorted={[{ id: 'priority', desc: true }]}
-          defaultPageSize={books.length}
-          showPagination={false}
-        />
-        <Notification
-          closeCallback={this.clearNotification}
-          message={this.state.notification}
-        />
-      </Fragment>
+      <NotificationConsumer>
+        {notify => {
+          this.notify = notify
+          return (
+            <ReactTable
+              data={books}
+              columns={columns}
+              className="-striped -highlight"
+              defaultSorted={[{ id: 'priority', desc: true }]}
+              defaultPageSize={books.length}
+              showPagination={false}
+            />
+          )
+        }}
+      </NotificationConsumer>
     )
   }
 }
